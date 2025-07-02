@@ -1,13 +1,18 @@
 package com.test.randomcontacts.data
 
-//serializeble or parcelizable
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ContactData(
     val id: Long,
-    val email: String,
     val fullName: String,
-    val gender: String,
-    val age: Int,
     val phoneNumber: String,
+    val address: String,
+    val email: String,
     val photoUrl: String,
-    val birthdayDate: String//TimeStamp???
+    val gender: String,
+    val age: String,
+    val birthdayDate: String,
+    val latitude: String,
+    val longitude: String,
 )

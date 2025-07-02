@@ -1,62 +1,208 @@
 package com.test.randomcontacts.view.contactDetails
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Phone
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.test.randomcontacts.R
 import com.test.randomcontacts.data.ContactData
-import com.test.randomcontacts.ui.theme.RandomContactsTheme
+import com.test.randomcontacts.view.callAddress
+import com.test.randomcontacts.view.callEmail
+import com.test.randomcontacts.view.callPhone
+import com.test.randomcontacts.view.core.common.IconMy
+import com.test.randomcontacts.view.core.common.IconMyInCircle
+import com.test.randomcontacts.view.core.common.ImageMy
+import com.test.randomcontacts.view.core.common.SpaceLarge
+import com.test.randomcontacts.view.core.common.SpaceMedium
+import com.test.randomcontacts.view.core.common.SpaceSmall
+import com.test.randomcontacts.view.core.common.TextBody
+import com.test.randomcontacts.view.core.common.TextTitleLarge
+import com.test.randomcontacts.view.core.common.clickNoRipple
+import com.test.randomcontacts.view.core.ui.theme.RandomContactsTheme
+import com.test.randomcontacts.view.core.ui.theme.getPrimaryColor
+import com.test.randomcontacts.view.core.ui.theme.getPrimaryContainerColor
+import com.test.randomcontacts.view.core.ui.theme.getTextOnPrimaryContainerColor
 
-//точно ли нужно ContactData??? это вроде как аргумент навигации
+
 @Composable
-fun ContactDetails(viewModel: ContactDetailsViewModel, contact:ContactData) {
-
+fun ContactDetails(
+    viewModel: ContactDetailsViewModel = viewModel(),
+    id: Long,
+    onError: (String) -> Unit,
+) {
+    ContactDetailsContent(viewModel.contactExample, onError)
 }
 
 @Composable
-fun ContactDetailsContent() {
-
+fun ContactDetailsContent(
+    contact: ContactData,
+    onError: (String) -> Unit,
+) {
+    val context = LocalContext.current
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState(), enabled = true),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        SpaceLarge()
+        Photo(contact.photoUrl, onError)
+        SpaceLarge()
+        FullName(contact.fullName)
+        SpaceLarge()
+        PhoneNumber(contact.phoneNumber) {
+            callPhone(contact.phoneNumber, context, onError)
+        }
+        SpaceMedium()
+        Address(contact.address) {
+            callAddress(contact.latitude, contact.longitude, context, onError)
+        }
+        SpaceMedium()
+        Email(contact.email) {
+            callEmail(contact.email, context, onError)
+        }
+        SpaceMedium()
+        BirthdayDate(contact.birthdayDate)
+        SpaceMedium()
+        Age(contact.age)
+        SpaceMedium()
+        Gender(contact.gender)
+        SpaceMedium()
+    }
 }
 
 @Composable
-fun Email() {
-
+fun Email(email: String, click: () -> Unit) {
+    IconWithTextClickable(Icons.Rounded.Email, stringResource(R.string.email), email, click)
 }
 
 @Composable
-fun Address() {
-
+fun Address(address: String, click: () -> Unit) {
+    IconWithTextClickable(
+        Icons.Rounded.LocationOn,
+        stringResource(R.string.address),
+        address,
+        click
+    )
 }
 
 @Composable
-fun Gender() {
-
+fun Gender(gender: String) {
+    IconWithText(
+        ImageVector.vectorResource(R.drawable.gender),
+        stringResource(R.string.gender),
+        gender
+    )
 }
 
 @Composable
-fun Age() {
-
+fun Age(age: String) {
+    IconWithText(Icons.Rounded.DateRange, stringResource(R.string.age), age)
 }
 
 @Composable
-fun BirthdayDate() {
-
+fun BirthdayDate(birthdayDate: String) {
+    IconWithText(
+        ImageVector.vectorResource(R.drawable.cake),
+        stringResource(R.string.birthday),
+        birthdayDate
+    )
 }
 @Composable
-fun PhoneNumber() {
-
+fun PhoneNumber(phoneNumber: String, click: () -> Unit) {
+    IconWithTextClickable(
+        Icons.Rounded.Phone,
+        stringResource(R.string.phone_number),
+        phoneNumber,
+        click
+    )
 }
-@Composable
-fun FullName() {
 
+
+@Composable
+fun IconWithTextClickable(icon: ImageVector, label: String, text: String, click: () -> Unit) {
+    Column(Modifier.clickNoRipple(click)) {
+        TextBody(label, getPrimaryColor(), Modifier.padding(start = 16.dp))
+        SpaceSmall()
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(getPrimaryContainerColor())
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
+            IconMyInCircle(icon, label)
+            SpaceMedium()
+            TextBody(text, getTextOnPrimaryContainerColor(), align = TextAlign.Center)
+        }
+    }
 }
-@Composable
-fun Photo() {
 
+@Composable
+fun IconWithText(icon: ImageVector, label: String, text: String) {
+    Column {
+        TextBody(label, getPrimaryColor(), Modifier.padding(start = 16.dp))
+        SpaceSmall()
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.outlineVariant)
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
+            IconMy(icon, label)
+            SpaceMedium()
+            TextBody(text, getTextOnPrimaryContainerColor(), align = TextAlign.Center)
+        }
+    }
+}
+
+
+@Composable
+fun FullName(fullName: String) {
+    TextTitleLarge(fullName)
+}
+
+@Composable
+fun Photo(photoUrl: String, error: (String) -> Unit) {
+    ImageMy(url = photoUrl, description = "photo", onError = error)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ContactCardPreview() {
     RandomContactsTheme {
-        ContactDetailsContent()
+        ContactDetailsContent(
+            ContactData(
+                0L,
+                "Bert Frazier",
+                "(499) 205-7398",
+                "65 Cackson St",
+                "herbert.frazier@example.com",
+                "https://randomuser.me/api/portraits/women/5.jpg",
+                "male",
+                "30",
+                "5/5/1963", "", ""
+            ), {}
+        )
     }
 }

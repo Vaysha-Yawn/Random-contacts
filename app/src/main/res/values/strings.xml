@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Random contacts</string>
+    <string name="error_loading_image">Error loading image</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone number</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="birthday">Birthday</string>
+    <string name="app_not_found">App not found</string>
+    <string name="error">Error</string>
+    <string name="see_more_details">See more details</string>
 </resources>
