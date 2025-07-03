@@ -1,9 +1,11 @@
-package com.test.randomcontacts.data
+package com.test.randomcontacts.data.room
 
-import kotlinx.serialization.Serializable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Serializable
-data class ContactData(
+@Entity
+data class ContactEntity(
+    @PrimaryKey(autoGenerate = false)
     val id: String,
     val fullName: String,
     val phoneNumber: String,
