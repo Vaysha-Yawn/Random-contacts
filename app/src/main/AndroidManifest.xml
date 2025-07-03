@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".app.App"
@@ -28,7 +24,6 @@
             android:theme="@style/Theme.RandomContacts">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
